@@ -14,3 +14,15 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Auth::routes();
+
+Route::get('/register', function () {
+    if (\App\User::count() > 0) {
+        return redirect('/home');
+    }
+
+    return view('auth.register');
+})->name('register');
+
+Route::get('/home', 'HomeController@index')->name('home');

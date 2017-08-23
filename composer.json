@@ -12,6 +12,7 @@
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^2.4",
+        "doctrine/dbal": "^2.6",
         "fzaninotto/faker": "~1.4",
         "laravel/homestead": "^6.1",
         "mockery/mockery": "0.9.*",

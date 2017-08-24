@@ -11,14 +11,6 @@
     <span class="subtitle">Take your time.</span>
 @stop
 
-@push('scripts')
-    <script>
-        document.querySelector(".content").addEventListener("click", () => {
-            location.href = "/home";
-        });
-    </script>
-@endpush
-
 @push('styles')
     <style>
         .title img {

@@ -74,21 +74,32 @@ module.exports = __webpack_require__(1);
 /* 1 */
 /***/ (function(module, exports) {
 
-var parser = document.createElement('a');
-parser.href = location.href;
+(function () {
+    var parser = document.createElement('a');
+    parser.href = location.href;
 
-var dataIfs = ["underline", "active"];
+    var dataIfs = ["underline", "active"];
 
-dataIfs.forEach(function (dataIf) {
-    var selector = "data-" + dataIf + "-if";
-    var elements = document.querySelectorAll("[" + selector + "]");
-    elements.forEach(function (element) {
-        var ifUrl = element.attributes[selector].value;
-        if (parser.pathname.indexOf(ifUrl) !== -1) {
-            element.className = dataIf;
-        }
+    dataIfs.forEach(function (dataIf) {
+        var selector = "data-" + dataIf + "-if";
+        var elements = document.querySelectorAll("[" + selector + "]");
+        elements.forEach(function (element) {
+            var ifUrl = element.attributes[selector].value;
+            if (parser.pathname.indexOf(ifUrl) !== -1) {
+                element.className = dataIf;
+            }
+        });
     });
-});
+})();
+
+(function () {
+    if (typeof $ !== "undefined") {
+        var dataTables = $("table[data-datatable]");
+        if (dataTables.length > 0) {
+            dataTables.DataTable();
+        }
+    }
+})();
 
 /***/ })
 /******/ ]);

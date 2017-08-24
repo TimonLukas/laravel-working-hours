@@ -11,3 +11,28 @@
     bottom: 10px;
     width: 100%;
 }
+
+.main-panel > .content {
+    margin-top: 0;
+}
+
+.dataTables_wrapper .form-group {
+    margin: 2px !important;
+}
+
+.dataTables_filter, .dataTables_paginate {
+    text-align: right;
+}
+
+.dataTables_filter input.form-control {
+    margin-left: 5px;
+}
+
+.dataTables_info {
+    margin-top: 2em;
+}
+
+.pagination > .active > a {
+    background-color: #4caf50;
+    border-color: #4caf50;
+}

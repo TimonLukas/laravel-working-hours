@@ -29,3 +29,5 @@ Route::get('/register', function () {
 
     return view('auth.register');
 })->name('register');
+
+Route::resource('/users', 'UserController');

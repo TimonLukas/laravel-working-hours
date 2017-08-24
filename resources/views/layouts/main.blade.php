@@ -18,8 +18,7 @@
     <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300|Material+Icons' rel='stylesheet'
           type='text/css'>
 
-    <link href="{{ asset("/css/util.css") }}" rel="stylesheet">
-    <link href="{{ asset("/css/main.css") }}" rel="stylesheet">
+    <link href="{{ asset("/css/style.css") }}" rel="stylesheet">
 </head>
 
 <body>
@@ -50,6 +49,16 @@
                         <i class="material-icons">content_paste</i>
                         <p>Projects</p>
                     </a>
+                </li>
+                <li class="logout">
+                    <a href="{{ route('logout') }}"
+                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        <i class="material-icons">perm_identity</i>
+                        <p>Log out</p>
+                    </a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        {{ csrf_field() }}
+                    </form>
                 </li>
             </ul>
         </div>

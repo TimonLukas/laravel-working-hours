@@ -5,3 +5,9 @@
 .sidebar img {
     max-width: 100%;
 }
+
+.logout {
+    position: absolute !important;
+    bottom: 10px;
+    width: 100%;
+}

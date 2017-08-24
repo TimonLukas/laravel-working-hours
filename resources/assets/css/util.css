@@ -9,3 +9,7 @@
 .align-right {
     text-align: right;
 }
+
+.inline-block {
+    display: inline-block;
+}

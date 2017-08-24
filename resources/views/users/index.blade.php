@@ -8,8 +8,17 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header" data-background-color="green">
-                <h4 class="title">All users</h4>
-                <p class="category">Every user (managers and employers)</p>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h4 class="title">All users</h4>
+                        <p class="category">Every user (managers and employers)</p>
+                    </div>
+                    <div class="col-sm-6 align-right">
+                        <a href="/users/create" class="btn btn-default">
+                            <i class="material-icons">person_add</i>
+                        </a>
+                    </div>
+                </div>
             </div>
             <div class="card-content table-responsive">
                 <table class="table table-hover" data-datatable>
@@ -28,7 +37,16 @@
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->created_at->format('Y-m-d') }}</td>
                             <td>
-
+                                <a href="/users/{{ $user->id }}/edit" class="btn btn-default">
+                                    <i class="material-icons">mode_edit</i>
+                                </a>
+                                <form action="/users/{{ $user->id }}" method="POST" class="inline-block">
+                                    {{ csrf_field() }}
+                                    {{ method_field('DELETE') }}
+                                    <button class="btn btn-danger">
+                                        <i class="material-icons">delete</i>
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                     @endforeach

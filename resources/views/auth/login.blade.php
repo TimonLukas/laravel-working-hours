@@ -62,7 +62,7 @@
     </div>
 @endsection
 
-@push("styles")
+@push('styles')
     <style>
         .content .panel-heading {
             font-size: 4rem;

@@ -10,10 +10,15 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 Route::get('/', function () {
-    return view('welcome');
+    if (Auth::check()) {
+        return (new \App\Http\Controllers\DashboardController())->index();
+    }
+
+    return view("welcome");
 });
+
+Route::get('/dashboard', 'DashboardController@index')->middleware('auth');
 
 Auth::routes();
 
@@ -24,5 +29,3 @@ Route::get('/register', function () {
 
     return view('auth.register');
 })->name('register');
-
-Route::get('/home', 'HomeController@index')->name('home');

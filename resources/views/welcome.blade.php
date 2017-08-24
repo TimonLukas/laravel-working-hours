@@ -4,14 +4,14 @@
     Welcome | @parent
 @stop
 
-@section("content")
+@section('content')
     <div class="title m-b-md">
         <img src="{{ asset("/images/logo.png") }}">
     </div>
     <span class="subtitle">Take your time.</span>
 @stop
 
-@push("scripts")
+@push('scripts')
     <script>
         document.querySelector(".content").addEventListener("click", () => {
             location.href = "/home";
@@ -19,7 +19,7 @@
     </script>
 @endpush
 
-@push("styles")
+@push('styles')
     <style>
         .title img {
             max-width: 70vw;

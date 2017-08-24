@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>
-        @section("title")
+        @section('title')
             Working Hours
         @show
     </title>
@@ -79,10 +79,10 @@
     @endif
 
     <div class="content">
-        @yield("content")
+        @yield('content')
     </div>
 </div>
-@stack("scripts")
-<script src="{{ asset("/js/util.js") }}"></script>
+@stack('scripts')
+<script src="{{ asset('/js/util.js') }}"></script>
 </body>
 </html>

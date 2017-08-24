@@ -12,10 +12,10 @@
 */
 Route::get('/', function () {
     if (Auth::check()) {
-        return (new \App\Http\Controllers\DashboardController())->index();
+        return redirect('/dashboard');
     }
 
-    return view("welcome");
+    return view('welcome');
 });
 
 Route::get('/dashboard', 'DashboardController@index')->middleware('auth');

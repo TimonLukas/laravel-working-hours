@@ -74,14 +74,20 @@ module.exports = __webpack_require__(1);
 /* 1 */
 /***/ (function(module, exports) {
 
-var currentUrl = location.href;
+var parser = document.createElement('a');
+parser.href = location.href;
 
-var underlineIf = document.querySelectorAll("[data-underline-if]");
-underlineIf.forEach(function (node) {
-    var underlineIfUrl = node.attributes["data-underline-if"].value;
-    if (currentUrl.indexOf(underlineIfUrl) !== -1) {
-        node.className = "underline";
-    }
+var dataIfs = ["underline", "active"];
+
+dataIfs.forEach(function (dataIf) {
+    var selector = "data-" + dataIf + "-if";
+    var elements = document.querySelectorAll("[" + selector + "]");
+    elements.forEach(function (element) {
+        var ifUrl = element.attributes[selector].value;
+        if (parser.pathname.indexOf(ifUrl) !== -1) {
+            element.className = dataIf;
+        }
+    });
 });
 
 /***/ })

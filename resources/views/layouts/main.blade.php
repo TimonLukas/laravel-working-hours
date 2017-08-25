@@ -33,7 +33,7 @@
         <div class="sidebar-wrapper">
             <ul class="nav">
                 <li data-active-if="/dashboard">
-                    <a href="dashboard.html">
+                    <a href="/dashboard">
                         <i class="material-icons">dashboard</i>
                         <p>Dashboard</p>
                     </a>
@@ -44,8 +44,8 @@
                         <p>Users</p>
                     </a>
                 </li>
-                <li>
-                    <a href="table.html">
+                <li data-active-if="/projects">
+                    <a href="/projects">
                         <i class="material-icons">content_paste</i>
                         <p>Projects</p>
                     </a>

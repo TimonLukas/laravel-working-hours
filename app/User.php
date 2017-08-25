@@ -51,4 +51,14 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    public function works()
+    {
+        return $this->hasMany(Work::class);
+    }
+
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class, 'works');
+    }
 }

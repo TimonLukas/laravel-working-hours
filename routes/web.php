@@ -31,3 +31,4 @@ Route::get('/register', function () {
 })->name('register');
 
 Route::resource('/users', 'UserController');
+Route::resource('/projects', 'ProjectController');

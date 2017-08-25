@@ -20,8 +20,9 @@ class CreateWorksTable extends Migration
             $table->integer('project_id')->references('id')->on('projects')->onDelete('cascade');
 
             $table->dateTime('start');
+            $table->float('hours');
             $table->mediumText('work_done');
-            $table->float('rate')->nullable();
+            $table->float('rate');
 
             $table->timestamps();
         });

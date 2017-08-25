@@ -50,6 +50,12 @@
                         <p>Projects</p>
                     </a>
                 </li>
+                <li data-active-if="/work">
+                    <a href="/works/create">
+                        <i class="material-icons">add</i>
+                        <p>Add new work</p>
+                    </a>
+                </li>
                 <li class="logout">
                     <a href="{{ route('logout') }}"
                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

@@ -70,7 +70,7 @@
                 const tr = target.parent();
                 const id = tr.data("id");
 
-                location.href = `/users/${id}`;
+                location.href = `/projects/${id}`;
             }
         });
     </script>

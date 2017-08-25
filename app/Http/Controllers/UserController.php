@@ -41,6 +41,7 @@ class UserController extends Controller
             'name' => $request->get('name'),
             'email' => $request->get('email'),
             'is_manager' => $request->get('isManager') === 'on',
+            'rate' => $request->get('rate'),
             'password' => bcrypt(random_bytes(100))
         ]);
 
@@ -66,7 +67,8 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = User::find($id);
+        return view('users.edit', ['user' => $user]);
     }
 
     /**
@@ -78,7 +80,15 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = User::find($id);
+        $user->update([
+            'name' => $request->get('name'),
+            'email' => $request->get('email'),
+            'is_manager' => $request->get('isManager') === 'on',
+            'rate' => $request->get('rate'),
+        ]);
+
+        return redirect("/users/$id/edit");
     }
 
     /**

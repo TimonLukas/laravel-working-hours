@@ -25,6 +25,13 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereUpdatedAt($value)
+ * @property int $is_manager
+ * @property float $rate
+ * @property-read \Illuminate\Database\Eloquent\Collection|\OwenIt\Auditing\Models\Audit[] $audits
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Project[] $projects
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Work[] $works
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereIsManager($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereRate($value)
  */
 class User extends Authenticatable implements Auditable
 {

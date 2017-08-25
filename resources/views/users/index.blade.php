@@ -26,6 +26,7 @@
                     <tr>
                         <th>Name</th>
                         <th>E-Mail</th>
+                        <th>Is manager</th>
                         <th>Registered on</th>
                         <th>Actions</th>
                     </tr>
@@ -35,6 +36,7 @@
                         <tr data-id="{{ $user->id }}">
                             <td>{{ $user->name }}</td>
                             <td>{{ $user->email }}</td>
+                            <td><i class="material-icons">{{ $user->is_manager ? 'check' : 'close' }}</i></td>
                             <td>{{ $user->created_at->format('Y-m-d') }}</td>
                             <td>
                                 <a href="/users/{{ $user->id }}/edit" class="btn btn-default">

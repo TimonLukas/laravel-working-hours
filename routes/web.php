@@ -18,8 +18,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', 'DashboardController@index')->middleware('auth');
-
 Auth::routes();
 
 Route::get('/register', function () {
@@ -30,5 +28,8 @@ Route::get('/register', function () {
     return view('auth.register');
 })->name('register');
 
-Route::resource('/users', 'UserController');
-Route::resource('/projects', 'ProjectController');
+Route::group(['middleware' => ['auth']], function () {
+    Route::get('/dashboard', 'DashboardController@index');
+    Route::resource('/users', 'UserController');
+    Route::resource('/projects', 'ProjectController');
+});

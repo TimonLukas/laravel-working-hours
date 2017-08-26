@@ -32,34 +32,7 @@
         </div>
     </div>
 
-    <div class="card">
-        <div class="card-header" data-background-color="green">
-            <h4 class="title">Audit log</h4>
-            <p class="category">Any and all changes done to this user</p>
-        </div>
-        <div class="card-content">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th>Type</th>
-                    <th>Done by</th>
-                    <th>Done on</th>
-                    <th>Change</th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach($user->audits as $audit)
-                    <tr>
-                        <td>{{ ucfirst($audit->event) }}</td>
-                        <td>{{ \App\User::find($audit->user_id)->name }}</td>
-                        <td>{{ $audit->created_at->format("Y-m-d h:i:s") }}</td>
-                        <td>{{ json_encode($audit->old_values) }} &rarr; {{ json_encode($audit->new_values) }}</td>
-                    </tr>
-                @endforeach
-                </tbody>
-            </table>
-        </div>
-    </div>
+    @include('audit', ['resource' => $user])
 @stop
 
 @push('scripts')

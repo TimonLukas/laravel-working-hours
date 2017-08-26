@@ -89,7 +89,7 @@ class UserController extends Controller
             'rate' => $request->get('rate'),
         ]);
 
-        return redirect("/users/$id/edit");
+        return redirect("/users/$id");
     }
 
     /**

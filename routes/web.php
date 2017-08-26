@@ -32,4 +32,5 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/dashboard', 'DashboardController@index');
     Route::resource('/users', 'UserController');
     Route::resource('/projects', 'ProjectController');
+    Route::resource('/works', 'WorkController');
 });

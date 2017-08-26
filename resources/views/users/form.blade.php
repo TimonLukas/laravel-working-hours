@@ -14,6 +14,14 @@
            value="{{ number_format($user->rate, 2) }}">
 </div>
 
+<div class="form-group">
+    <label for="projects" class="control-label">Projects</label>
+    <select class="selectpicker" multiple data-tick-icon="check">
+        <option>Test</option>
+        <option>Wazzup</option>
+    </select>
+</div>
+
 <div class="checkbox">
     <label>
         <input type="checkbox" {{ $user->is_manager ? 'checked' : '' }} name="isManager"> Is a manager

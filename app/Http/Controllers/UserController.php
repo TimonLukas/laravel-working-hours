@@ -53,7 +53,7 @@ class UserController extends Controller
             ]);
         }
 
-        return $this->index();
+        return redirect("users/$user->id");
     }
 
     /**

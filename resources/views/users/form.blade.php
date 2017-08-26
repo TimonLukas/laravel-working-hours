@@ -14,13 +14,20 @@
            value="{{ number_format($user->rate, 2) }}">
 </div>
 
-<div class="form-group">
-    <label for="projects" class="control-label">Projects</label>
-    <select class="selectpicker" multiple data-tick-icon="check">
-        <option>Test</option>
-        <option>Wazzup</option>
-    </select>
-</div>
+@if(!$user->is_manager)
+    @if(count(\App\Project::all()) === 0)
+        No projects are created yet - go make some!
+    @else
+        <div class="form-group">
+            <label for="projects" class="control-label">Projects</label>
+            <select class="selectpicker" multiple data-tick-icon="check" id="projects[]" name="projects[]">
+                @foreach(\App\Project::all() as $project)
+                    <option {{ $user->projects->contains($project) ? 'selected' : '' }} value='{{ $project->id }}'>{{ $project->name }}</option>
+                @endforeach
+            </select>
+        </div>
+    @endif
+@endif
 
 <div class="checkbox">
     <label>

@@ -38,7 +38,7 @@ class Project extends Model implements Auditable
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'works');
+        return $this->belongsToMany(User::class, 'user_projects');
     }
 
     public function getHoursAttribute()

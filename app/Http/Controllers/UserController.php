@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\UserProject;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -37,13 +38,20 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        User::create([
+        $user = User::create([
             'name' => $request->get('name'),
             'email' => $request->get('email'),
             'is_manager' => $request->get('isManager') === 'on',
             'rate' => $request->get('rate'),
             'password' => bcrypt(random_bytes(100))
         ]);
+
+        foreach ($request->get('projects') as $project) {
+            UserProject::create([
+                'user_id' => $user->id,
+                'project_id' => $project,
+            ]);
+        }
 
         return $this->index();
     }
@@ -88,6 +96,15 @@ class UserController extends Controller
             'is_manager' => $request->get('isManager') === 'on',
             'rate' => $request->get('rate'),
         ]);
+
+        UserProject::whereUserId($id)->delete();
+
+        foreach ($request->get('projects') as $project) {
+            UserProject::create([
+                'user_id' => $id,
+                'project_id' => $project,
+            ]);
+        }
 
         return redirect("/users/$id");
     }

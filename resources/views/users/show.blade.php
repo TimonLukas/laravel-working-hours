@@ -32,6 +32,26 @@
         </div>
     </div>
 
+    @if(!$user->is_manager)
+        <div class="card">
+            <div class="card-header" data-background-color="green">
+                <h4 class="title">Projects</h4>
+                <p class="category">Projects to which {{ $user->name }} has access</p>
+            </div>
+            <div class="card-content">
+                @if(count($user->projects) > 0)
+                    <ul>
+                        @foreach($user->projects as $project)
+                            <li>{{ $project->name }}</li>
+                        @endforeach
+                    </ul>
+                @else
+                    None
+                @endif
+            </div>
+        </div>
+    @endif
+
     @include('audit', ['resource' => $user])
 @stop
 

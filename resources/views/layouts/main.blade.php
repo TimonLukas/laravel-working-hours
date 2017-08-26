@@ -28,7 +28,7 @@
 <div class="wrapper">
     <div class="sidebar" data-color="green">
         <div class="logo">
-            <a href="/home" class="simple-text">
+            <a href="/" class="simple-text">
                 <img src="{{ asset("/images/logo.png") }}"/>
             </a>
         </div>

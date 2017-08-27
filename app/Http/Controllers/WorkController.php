@@ -63,7 +63,11 @@ class WorkController extends Controller
      */
     public function show(Work $work)
     {
-        //
+        if (!$this->guard($work)) {
+            return redirect("/projects/$work->project_id");
+        }
+
+        // TODO: implement
     }
 
     /**
@@ -74,7 +78,11 @@ class WorkController extends Controller
      */
     public function edit(Work $work)
     {
-        //
+        if (!$this->guard($work)) {
+            return redirect("/projects/$work->project_id");
+        }
+
+        // TODO: implement
     }
 
     /**
@@ -86,7 +94,11 @@ class WorkController extends Controller
      */
     public function update(Request $request, Work $work)
     {
-        //
+        if (!$this->guard($work)) {
+            return redirect("/projects/$work->project_id");
+        }
+
+        // TODO: implement
     }
 
     /**
@@ -97,6 +109,26 @@ class WorkController extends Controller
      */
     public function destroy(Work $work)
     {
-        //
+        if (!$this->guard($work)) {
+            return redirect("/projects/$work->project_id");
+        }
+
+        // TODO: implement
+    }
+
+    /**
+     * Checks current user privileges before allowing them through
+     *
+     * @param Work $work The work which will be looked at
+     * @return bool
+     */
+    private function guard(Work $work)
+    {
+        $user = \Auth::user();
+        if ($user->id === $work->user->id || $user->isManager()) {
+            return true;
+        }
+
+        return false;
     }
 }

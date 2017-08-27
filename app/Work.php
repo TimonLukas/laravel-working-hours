@@ -44,6 +44,8 @@ class Work extends Model implements Auditable
         'rate'
     ];
 
+    protected $dates = ['start'];
+
     public function user()
     {
         return $this->belongsTo(User::class);

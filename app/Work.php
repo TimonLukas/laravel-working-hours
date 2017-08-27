@@ -35,6 +35,15 @@ class Work extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
 
+    protected $fillable = [
+        'user_id',
+        'project_id',
+        'start',
+        'hours',
+        'work_done',
+        'rate'
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

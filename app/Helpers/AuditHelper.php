@@ -10,10 +10,17 @@ class AuditHelper
         $newAuditValues = [];
 
         foreach ($audit->getModified() as $key => $change) {
+            if (isset($change['old']) && is_array($change['old'])) {
+                $change['old'] = $change['old']['date'];
+            }
+
+            if (isset($change['new']) && is_array($change['new'])) {
+                $change['new'] = $change['new']['date'];
+            }
+
             if (isset($change['old']) && $change['old'] == $change['new']) {
                 continue;
             }
-
             $newAuditValues[$key] = $change;
         }
 

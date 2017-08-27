@@ -27,7 +27,7 @@
                                     @if(isset($values['old']))
                                         "{{ $values['old'] }}" &rarr;
                                     @endif
-                                    "{{ $values['new'] }}"
+                                    "{{ json_encode($values['new']) }}"
                                 </li>
                             @endforeach
                         </ul>

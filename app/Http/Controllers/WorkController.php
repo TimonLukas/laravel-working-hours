@@ -67,7 +67,7 @@ class WorkController extends Controller
             return redirect("/projects/$work->project_id");
         }
 
-        // TODO: implement
+        return view('works.show', ['work' => $work]);
     }
 
     /**

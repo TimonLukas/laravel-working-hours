@@ -30,7 +30,10 @@ Route::get('/register', function () {
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/dashboard', 'DashboardController@index');
-    Route::resource('/users', 'UserController');
     Route::resource('/projects', 'ProjectController');
     Route::resource('/works', 'WorkController');
+
+    Route::group(['middleware' => ['is-manager']], function () {
+        Route::resource('/users', 'UserController');
+    });
 });

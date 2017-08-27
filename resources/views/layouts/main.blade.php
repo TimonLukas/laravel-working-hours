@@ -41,12 +41,14 @@
                         <p>Dashboard</p>
                     </a>
                 </li>
-                <li data-active-if="/users">
-                    <a href="/users">
-                        <i class="material-icons">person</i>
-                        <p>Users</p>
-                    </a>
-                </li>
+                @if(Auth::check() && Auth::user()->isManager())
+                    <li data-active-if="/users">
+                        <a href="/users">
+                            <i class="material-icons">person</i>
+                            <p>Users</p>
+                        </a>
+                    </li>
+                @endif
                 <li data-active-if="/projects">
                     <a href="/projects">
                         <i class="material-icons">content_paste</i>

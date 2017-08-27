@@ -46,11 +46,13 @@ class UserController extends Controller
             'password' => bcrypt(random_bytes(100))
         ]);
 
-        foreach ($request->get('projects') as $project) {
-            UserProject::create([
-                'user_id' => $user->id,
-                'project_id' => $project,
-            ]);
+        if ($request->has('projects')) {
+            foreach ($request->get('projects') as $project) {
+                UserProject::create([
+                    'user_id' => $user->id,
+                    'project_id' => $project,
+                ]);
+            }
         }
 
         return redirect("users/$user->id");
@@ -99,11 +101,13 @@ class UserController extends Controller
 
         UserProject::whereUserId($id)->delete();
 
-        foreach ($request->get('projects') as $project) {
-            UserProject::create([
-                'user_id' => $id,
-                'project_id' => $project,
-            ]);
+        if ($request->has('projects')) {
+            foreach ($request->get('projects') as $project) {
+                UserProject::create([
+                    'user_id' => $id,
+                    'project_id' => $project,
+                ]);
+            }
         }
 
         return redirect("/users/$id");

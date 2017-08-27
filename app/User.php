@@ -74,4 +74,9 @@ class User extends Authenticatable implements Auditable
 
         return Project::all();
     }
+
+    public function isManager()
+    {
+        return $this->is_manager;
+    }
 }

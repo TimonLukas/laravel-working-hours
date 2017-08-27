@@ -58,7 +58,7 @@
                 <li data-active-if="/work">
                     <a href="/works/create">
                         <i class="material-icons">add</i>
-                        <p>Add new work</p>
+                        <p>Add new work unit</p>
                     </a>
                 </li>
                 <li class="logout">

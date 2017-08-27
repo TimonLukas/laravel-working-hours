@@ -66,12 +66,12 @@ class User extends Authenticatable implements Auditable
         return $this->hasMany(Work::class);
     }
 
-    public function projects()
+    public function getProjectsAttribute()
     {
-        if ($this->is_manager) {
-            return Project::all();
+        if (!$this->is_manager) {
+            return $this->belongsToMany(Project::class, 'user_projects')->get();
         }
 
-        return $this->belongsToMany(Project::class, 'user_projects');
+        return Project::all();
     }
 }

@@ -7,8 +7,24 @@
 @section('content')
     <div class="card">
         <div class="card-header" data-background-color="green">
-            <h4 class="title">{{ $user->name }}</h4>
-            <p class="category">Show {{ $user->name }}'s properties and changes to them</p>
+            <div class="row">
+                <div class="col-sm-6">
+                    <h4 class="title">{{ $user->name }}</h4>
+                    <p class="category">Show {{ $user->name }}'s properties and changes to them</p>
+                </div>
+                <div class="col-sm-6 align-right">
+                    <a href="/users/{{ $user->id }}/edit" class="btn btn-default">
+                        <i class="material-icons">mode_edit</i>
+                    </a>
+                    <form action="/users/{{ $user->id }}" method="POST" class="inline-block">
+                        {{ csrf_field() }}
+                        {{ method_field('DELETE') }}
+                        <button class="btn btn-danger">
+                            <i class="material-icons">delete</i>
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
         <div class="card-content">
             <div class="row">

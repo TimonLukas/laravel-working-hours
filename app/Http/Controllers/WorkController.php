@@ -26,7 +26,7 @@ class WorkController extends Controller
     public function create()
     {
         $user = \Auth::user();
-        return view('works.create', ['user' => $user]);
+        return view('works.create', ['user' => $user, 'work' => new Work()]);
     }
 
     /**
@@ -39,7 +39,7 @@ class WorkController extends Controller
     {
         $start = Carbon::createFromFormat('Y-m-d\TH:i', $request->get('start'));
         $end = Carbon::createFromFormat('Y-m-d\TH:i', $request->get('end'));
-        $hours = $end->diffInMinutes($start) / 60;
+        $hours = round($end->diffInMinutes($start) / 60, 2);
 
         $projectId = $request->get('project');
 
@@ -82,7 +82,7 @@ class WorkController extends Controller
             return redirect("/projects/$work->project_id");
         }
 
-        // TODO: implement
+        return view('works.edit', ['work' => $work, 'user' => \Auth::user()]);
     }
 
     /**
@@ -98,7 +98,21 @@ class WorkController extends Controller
             return redirect("/projects/$work->project_id");
         }
 
-        // TODO: implement
+        $start = Carbon::createFromFormat('Y-m-d\TH:i', $request->get('start'));
+        $end = Carbon::createFromFormat('Y-m-d\TH:i', $request->get('end'));
+        $hours = round($end->diffInMinutes($start) / 60, 2);
+
+        $projectId = $request->get('project');
+
+        $work->update([
+            'project_id' => $projectId,
+            'start' => $start,
+            'hours' => $hours,
+            'work_done' => $request->get('work_done'),
+            'rate' => $request->get('rate'),
+        ]);
+
+        return redirect("/projects/$projectId");
     }
 
     /**

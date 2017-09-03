@@ -26,6 +26,7 @@
                 </div>
             </div>
         </div>
+
         <div class="card-content">
             <div class="row">
                 <div class="col-sm-2 align-right"><b>Name</b></div>
@@ -45,6 +46,45 @@
                     <div class="col-sm-10">{{ $project->cost }}</div>
                 </div>
             @endif
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header card-chart" data-background-color="green">
+                    <div class="ct-chart" id="hoursPerDayChart"></div>
+                </div>
+                <div class="card-content">
+                    <h4 class="title">Hours per day</h4>
+                    <p class="category">See at a glance how many hours this project had, per day, in the last month</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header card-chart" data-background-color="orange">
+                    <div class="ct-chart" id="devsPerDayChart"></div>
+                </div>
+                <div class="card-content">
+                    <h4 class="title">Daily developers</h4>
+                    <p class="category">How many developers worked on this per day?</p>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header card-chart" data-background-color="red">
+                    <div class="ct-chart" id="costPerDayChart"></div>
+                </div>
+                <div class="card-content">
+                    <h4 class="title">Cost</h4>
+                    <p class="category">Keep the total cost at bay</p>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -109,13 +149,15 @@
     @include('audit', ['resource' => $project])
 @stop
 
-@push('scripts')
+@push('styles')
     <style>
         .card-content .row {
             margin-top: 1em;
         }
     </style>
+@endpush
 
+@push('scripts')
     <script>
         $("table.dataTable").on("click", "tbody tr", (event) => {
             if (event.target.tagName === "TD") {
@@ -126,5 +168,69 @@
                 location.href = `/works/${id}`;
             }
         });
+    </script>
+
+    <script>
+        const dataHoursPerDayChart = {
+            labels: {!! json_encode($labels) !!},
+            series: [
+                {!! json_encode($hours) !!}
+            ]
+        };
+
+        const optionsHoursPerDayChart = {
+            lineSmooth: Chartist.Interpolation.cardinal({
+                tension: 0
+            }),
+            low: 0,
+            high: 24,
+            chartPadding: {top: 0, right: 0, bottom: 0, left: 0},
+        };
+
+        const hoursPerDayChart = new Chartist.Line('#hoursPerDayChart', dataHoursPerDayChart, optionsHoursPerDayChart);
+
+        md.startAnimationForLineChart(hoursPerDayChart);
+
+
+        const dataUsersPerDayChart = {
+            labels: {!! json_encode($labels) !!},
+            series: [
+                {!! json_encode($users) !!}
+            ]
+        };
+
+        const optionsUsersPerDayChart = {
+            lineSmooth: Chartist.Interpolation.cardinal({
+                tension: 0
+            }),
+            low: 0,
+            high: 10,
+            chartPadding: {top: 0, right: 0, bottom: 0, left: 0},
+        };
+
+        const usersPerDayChart = new Chartist.Line('#devsPerDayChart', dataUsersPerDayChart, optionsUsersPerDayChart);
+
+        md.startAnimationForLineChart(usersPerDayChart);
+
+
+        const dataCostPerDayChart = {
+            labels: {!! json_encode($labels) !!},
+            series: [
+                {!! json_encode($costs) !!}
+            ]
+        };
+
+        const optionsCostPerDayChart = {
+            lineSmooth: Chartist.Interpolation.cardinal({
+                tension: 0
+            }),
+            low: 0,
+            high: 100,
+            chartPadding: {top: 0, right: 0, bottom: 0, left: 0},
+        };
+
+        const costPerDayChart = new Chartist.Line('#costPerDayChart', dataCostPerDayChart, optionsCostPerDayChart);
+
+        md.startAnimationForLineChart(costPerDayChart);
     </script>
 @endpush

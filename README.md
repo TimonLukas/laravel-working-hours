@@ -5,6 +5,7 @@ An app to track how much you worked, with statistics and the like.
 ## Installation
 1. Clone the repository (or download a blob)
 2. `composer install`
-3. `npm install`
-4. `npm run production`
-5. Create your `.env` file
+3. Create your `.env` file
+4. `artisan migrate`
+5. `npm install`
+6. `npm run production`

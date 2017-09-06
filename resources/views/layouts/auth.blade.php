@@ -11,7 +11,7 @@
         @show
     </title>
 
-    <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
     <link href="{{ asset("/css/util.css") }}" rel="stylesheet" type="text/css">
     <link href="{{ asset("/css/bootstrap.min.css") }}" rel="stylesheet" type="text/css">
 

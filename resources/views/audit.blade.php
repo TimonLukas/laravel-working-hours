@@ -17,7 +17,7 @@
             @foreach(\App\Helpers\AuditHelper::prepareAudits($resource->audits) as $audit)
                 <tr>
                     <td>{{ ucfirst($audit['type']) }}</td>
-                    <td>{{ \App\User::find($audit['user_id'])->name }}</td>
+                    <td>{{ $user = \App\User::find($audit['user_id']) !== null ? $user->name : 'Deleted user' }}</td>
                     <td>{{ $audit['created_at']->format('Y-m-d h:i:s') }}</td>
                     <td>
                         <ul>

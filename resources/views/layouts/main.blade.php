@@ -18,10 +18,9 @@
     <link href='//fonts.googleapis.com/css?family=Roboto:400,700,300|Material+Icons' rel='stylesheet'
           type='text/css'>
 
-    <link rel="stylesheet"
-          href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+    <link rel="stylesheet" href="{{ asset("/css/bootstrap-select.min.css") }}">
 
-    <link href="{{ asset("/css/style.css") }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset("/css/style.css") }}">
 </head>
 
 <body>
@@ -97,10 +96,10 @@
 <script src="{{ asset('/js/chartist.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('/js/bootstrap-notify.js') }}" type="text/javascript"></script>
 <script src="{{ asset('/js/material-dashboard.js') }}" type="text/javascript"></script>
-<script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js" type="text/javascript"></script>
-<script src="//cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+<script src="{{ asset('/js/jquery.dataTables.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('/js/dataTables.bootstrap.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('/js/bootstrap-select.min.js') }}"></script>
+<script src="{{ asset('/js/moment.min.js') }}"></script>
 <script src="{{ asset('/js/util.js') }}" type="text/javascript"></script>
 <script src="{{ asset('/js/main.js') }}" type="text/javascript"></script>
 @stack('scripts')

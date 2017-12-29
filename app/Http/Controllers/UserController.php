@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\UserProject;
+use App\Work;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -67,7 +69,43 @@ class UserController extends Controller
     public function show($id)
     {
         $user = User::find($id);
-        return view('users.show', ['user' => $user]);
+
+        $now = (new Carbon())->subMonth();
+        $works = Work::all()->where('user_id', '=', $user->id)->where('start', '>=', $now)->all();
+        $works = collect($works)->sortBy('start', false);
+
+        $days = [];
+        foreach ($works as $work) {
+            $day = $work->start->format('d');
+            if (!isset($days[$day])) {
+                $days[$day] = 0;
+            }
+
+            $days[$day] += $work->hours;
+        }
+
+        $highest_cost = 0;
+        $costs = [];
+        foreach ($works as $work) {
+            $day = $work->start->format('d');
+            if (!isset($costs[$day])) {
+                $costs[$day] = 0;
+            }
+
+            $costs[$day] += $work->rate * $work->hours;
+
+            if ($highest_cost < $costs[$day]) {
+                $highest_cost = $costs[$day];
+            }
+        }
+
+        return view('users.show', [
+            'user' => $user,
+            'labels' => array_keys($days),
+            'hours' => array_values($days),
+            'costs' => array_values($costs),
+            'highest_cost' => $highest_cost,
+        ]);
     }
 
     /**

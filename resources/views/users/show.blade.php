@@ -48,6 +48,34 @@
         </div>
     </div>
 
+    @if(Auth::user()->isManager())
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header card-chart" data-background-color="green">
+                        <div class="ct-chart" id="hoursPerDayChart"></div>
+                    </div>
+                    <div class="card-content">
+                        <h4 class="title">Hours per day</h4>
+                        <p class="category">See at a glance how many hours this project had, per day, in the last
+                            month</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header card-chart" data-background-color="red">
+                        <div class="ct-chart" id="costPerDayChart"></div>
+                    </div>
+                    <div class="card-content">
+                        <h4 class="title">Cost</h4>
+                        <p class="category">Keep the total cost at bay</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
     @if(!$user->is_manager)
         <div class="card">
             <div class="card-header" data-background-color="green">
@@ -77,4 +105,49 @@
             margin-top: 1em;
         }
     </style>
+
+    <script>
+        /* HoursPerDayChart */
+        const dataHoursPerDayChart = {
+            labels: {!! json_encode($labels) !!},
+            series: [
+                {!! json_encode($hours) !!}
+            ]
+        };
+
+        const optionsHoursPerDayChart = {
+            lineSmooth: Chartist.Interpolation.cardinal({
+                tension: 0
+            }),
+            low: 0,
+            high: 24,
+            chartPadding: {top: 0, right: 0, bottom: 0, left: 0}
+        };
+
+        const hoursPerDayChart = new Chartist.Line('#hoursPerDayChart', dataHoursPerDayChart, optionsHoursPerDayChart);
+
+        md.startAnimationForLineChart(hoursPerDayChart);
+
+
+        /* CostPerDayChart */
+        const dataCostPerDayChart = {
+            labels: {!! json_encode($labels) !!},
+            series: [
+                {!! json_encode($costs) !!}
+            ]
+        };
+
+        const optionsCostPerDayChart = {
+            lineSmooth: Chartist.Interpolation.cardinal({
+                tension: 0
+            }),
+            low: 0,
+            high: {{ $highest_cost }},
+            chartPadding: {top: 0, right: 0, bottom: 0, left: 0}
+        };
+
+        const costPerDayChart = new Chartist.Line('#costPerDayChart', dataCostPerDayChart, optionsCostPerDayChart);
+
+        md.startAnimationForLineChart(costPerDayChart);
+    </script>
 @endpush

@@ -61,6 +61,7 @@ class ProjectController extends Controller
 
         $now = (new Carbon())->subMonth();
         $works = Work::all()->where('project_id', '=', $project->id)->where('start', '>=', $now)->all();
+        $works = collect($works)->sortBy('start', false);
 
         $days = [];
         foreach ($works as $work) {

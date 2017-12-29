@@ -15,6 +15,8 @@ use OwenIt\Auditing\Contracts\Auditable;
  * @property float $hours
  * @property string $work_done
  * @property float $rate
+ * @property string $ip_address_start
+ * @property string $ip_address_end
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\OwenIt\Auditing\Models\Audit[] $audits
@@ -41,7 +43,9 @@ class Work extends Model implements Auditable
         'start',
         'hours',
         'work_done',
-        'rate'
+        'rate',
+        'ip_address_start',
+        'ip_address_end',
     ];
 
     protected $dates = ['start'];

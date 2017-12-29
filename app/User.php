@@ -66,6 +66,17 @@ class User extends Authenticatable implements Auditable
         return $this->hasMany(Work::class);
     }
 
+    public function isConnectedToProject(Project $project)
+    {
+        foreach ($this->getProjectsAttribute()->all() as $value) {
+            if ($value->id === $project->id) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function getProjectsAttribute()
     {
         if (!$this->is_manager) {

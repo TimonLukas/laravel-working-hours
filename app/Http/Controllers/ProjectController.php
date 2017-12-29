@@ -27,6 +27,10 @@ class ProjectController extends Controller
      */
     public function create()
     {
+        if (!\Auth::user()->isManager()) {
+            return redirect('projects');
+        }
+
         return view('projects.create', ['project' => new Project()]);
     }
 
@@ -51,6 +55,10 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
+        if (!$this->guard($project)) {
+            return redirect("/projects");
+        }
+
         $now = (new Carbon())->subMonth();
         $works = Work::all()->where('project_id', '=', $project->id)->where('start', '>=', $now)->all();
 
@@ -80,6 +88,7 @@ class ProjectController extends Controller
             return count($entry);
         }, $users);
 
+        $highest_cost = 0;
         $costs = [];
         foreach ($works as $work) {
             $day = $work->start->format('d');
@@ -88,6 +97,10 @@ class ProjectController extends Controller
             }
 
             $costs[$day] += $work->rate * $work->hours;
+
+            if ($highest_cost < $costs[$day]) {
+                $highest_cost = $costs[$day];
+            }
         }
 
         return view('projects.show',
@@ -97,8 +110,25 @@ class ProjectController extends Controller
                 'hours' => array_values($days),
                 'users' => array_values($users),
                 'costs' => array_values($costs),
+                'highest_cost' => $highest_cost,
             ]
         );
+    }
+
+    /**
+     * Checks current user privileges before allowing them through
+     *
+     * @param Project $project The work which will be looked at
+     * @return bool
+     */
+    private function guard(Project $project)
+    {
+        $user = \Auth::user();
+        if ($user->isConnectedToProject($project) || $user->isManager()) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -109,6 +139,14 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
+        if (!$this->guard($project)) {
+            return redirect("/projects");
+        }
+
+        if (!\Auth::user()->isManager()) {
+            return redirect("/projects/$project->id");
+        }
+
         return view('projects.edit', ['project' => $project]);
     }
 
@@ -121,6 +159,10 @@ class ProjectController extends Controller
      */
     public function update(Request $request, Project $project)
     {
+        if (!$this->guard($project)) {
+            return redirect("/projects");
+        }
+
         $project->update($request->all());
         return redirect("/projects/$project->id");
     }
@@ -133,6 +175,10 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
+        if (!$this->guard($project)) {
+            return redirect("/projects");
+        }
+
         $project->delete();
         return redirect('/projects');
     }

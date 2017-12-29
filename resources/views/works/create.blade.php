@@ -14,7 +14,9 @@
             <form action="/works" method="post">
                 {{ csrf_field() }}
                 @include('works.form')
-                <button type="submit" class="btn btn-default">Create</button>
+                @if(count($user->projects) !== 0)
+                    <button type="submit" class="btn btn-default">Create</button>
+                @endif
             </form>
         </div>
     </div>

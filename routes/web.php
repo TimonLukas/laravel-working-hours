@@ -32,6 +32,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/dashboard', 'DashboardController@index');
     Route::resource('/projects', 'ProjectController');
     Route::resource('/works', 'WorkController');
+    Route::get('/works/create/start', 'WorkController@createStart');
+    Route::get('/works/create/end/{id}', 'WorkController@createEnd');
 
     Route::group(['middleware' => ['is-manager']], function () {
         Route::resource('/users', 'UserController');

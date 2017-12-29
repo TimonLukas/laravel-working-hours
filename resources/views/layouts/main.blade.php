@@ -35,13 +35,13 @@
 
         <div class="sidebar-wrapper">
             <ul class="nav">
-                <li data-active-if="/dashboard">
-                    <a href="/dashboard">
-                        <i class="material-icons">dashboard</i>
-                        <p>Dashboard</p>
-                    </a>
-                </li>
                 @if(Auth::check() && Auth::user()->isManager())
+                    <li data-active-if="/dashboard">
+                        <a href="/dashboard">
+                            <i class="material-icons">dashboard</i>
+                            <p>Dashboard</p>
+                        </a>
+                    </li>
                     <li data-active-if="/users">
                         <a href="/users">
                             <i class="material-icons">person</i>
@@ -55,12 +55,20 @@
                         <p>Projects</p>
                     </a>
                 </li>
-                <li data-active-if="/work">
-                    <a href="/works/create">
+                <li data-active-if="/works/create/start">
+                    <a href="/works/create/start">
                         <i class="material-icons">add</i>
-                        <p>Add new work unit</p>
+                        <p>Start new work unit</p>
                     </a>
                 </li>
+                @if(Auth::check() && Auth::user()->isManager())
+                    <li data-active-if="/works/create">
+                        <a href="/works/create">
+                            <i class="material-icons">add</i>
+                            <p>New manual work unit</p>
+                        </a>
+                    </li>
+                @endif
                 <li class="logout">
                     <a href="{{ route('logout') }}"
                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -94,5 +102,6 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
 <script src="{{ asset('/js/util.js') }}" type="text/javascript"></script>
+<script src="{{ asset('/js/main.js') }}" type="text/javascript"></script>
 @stack('scripts')
 </html>

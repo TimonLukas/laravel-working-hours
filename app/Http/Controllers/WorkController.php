@@ -15,7 +15,7 @@ class WorkController extends Controller
      */
     public function index()
     {
-        //
+        return redirect("");
     }
 
     /**
@@ -26,7 +26,48 @@ class WorkController extends Controller
     public function create()
     {
         $user = \Auth::user();
-        return view('works.create', ['user' => $user, 'work' => new Work()]);
+
+        if (!$user->isManager()) {
+            return redirect('works/create/start');
+        }
+
+        return view('works.create', [
+            'user' => $user,
+            'work' => new Work(),
+        ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function createStart()
+    {
+        $user = \Auth::user();
+        return view('works.create', [
+            'user' => $user,
+            'work' => new Work(),
+            'option' => "createStart",
+        ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function createEnd(int $id)
+    {
+        $work_unit = Work::find($id);
+
+        $user = \Auth::user();
+        return view('works.create', [
+            'user' => $user,
+            'work' => $work_unit,
+            'option' => "createEnd",
+        ]);
     }
 
     /**
@@ -37,20 +78,58 @@ class WorkController extends Controller
      */
     public function store(Request $request)
     {
-        $start = Carbon::createFromFormat('Y-m-d\TH:i', $request->get('start'));
-        $end = Carbon::createFromFormat('Y-m-d\TH:i', $request->get('end'));
-        $hours = round($end->diffInMinutes($start) / 60, 2);
+        $option = $request->get('option') ?? "";
+        $rate = $request->get('rate') ?? $request->user()->rate;
 
-        $projectId = $request->get('project');
+        if ($option === "createStart") {
+            $projectId = $request->get('project');
+            $start = Carbon::now();
+            $end = Carbon::now();
+            $hours = round($end->diffInMinutes($start) / 60, 2);
 
-        Work::create([
-            'user_id' => $request->user()->id,
-            'project_id' => $projectId,
-            'start' => $start,
-            'hours' => $hours,
-            'work_done' => $request->get('work_done'),
-            'rate' => $request->get('rate'),
-        ]);
+            Work::create([
+                'user_id' => $request->user()->id,
+                'project_id' => $projectId,
+                'start' => $start,
+                'hours' => $hours,
+                'work_done' => $request->get('work_done') ?? "",
+                'rate' => $rate,
+                'ip_address_start' => $_SERVER['REMOTE_ADDR'],
+            ]);
+        } elseif ($option === "createEnd") {
+            $work_unit = Work::find($request->get("work_unit"));
+            $projectId = $work_unit->project->id;
+
+            $start = $work_unit->start;
+            $end = Carbon::now();
+            $hours = round($end->diffInMinutes($start) / 60, 2);
+
+            $work_unit->hours = $hours;
+            $work_unit->work_done = $request->get('work_done') ?? "";
+            $work_unit->ip_address_end = $_SERVER['REMOTE_ADDR'];
+
+            $work_unit->save();
+        } else {
+            $projectId = $request->get('project');
+            $start = Carbon::createFromFormat('Y-m-d\TH:i', $request->get('start'));
+            $end = Carbon::createFromFormat('Y-m-d\TH:i', $request->get('end'));
+            $hours = round($end->diffInMinutes($start) / 60, 2);
+
+            $rate = $request->get('rate') ?? $request->user()->rate;
+
+            $projectId = $request->get('project');
+
+            Work::create([
+                'user_id' => $request->user()->id,
+                'project_id' => $projectId,
+                'start' => $start,
+                'hours' => $hours,
+                'work_done' => $request->get('work_done') ?? "",
+                'rate' => $rate,
+                'ip_address_start' => $_SERVER['REMOTE_ADDR'],
+                'ip_address_end' => $_SERVER['REMOTE_ADDR'],
+            ]);
+        }
 
         return redirect("/projects/$projectId");
     }
@@ -71,6 +150,22 @@ class WorkController extends Controller
     }
 
     /**
+     * Checks current user privileges before allowing them through
+     *
+     * @param Work $work The work which will be looked at
+     * @return bool
+     */
+    private function guard(Work $work)
+    {
+        $user = \Auth::user();
+        if ($user->id === $work->user->id || $user->isManager()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Work $work
@@ -80,6 +175,10 @@ class WorkController extends Controller
     {
         if (!$this->guard($work)) {
             return redirect("/projects/$work->project_id");
+        }
+
+        if (!\Auth::user()->isManager()) {
+            return redirect("/works/$work->id");
         }
 
         return view('works.edit', ['work' => $work, 'user' => \Auth::user()]);
@@ -102,6 +201,8 @@ class WorkController extends Controller
         $end = Carbon::createFromFormat('Y-m-d\TH:i', $request->get('end'));
         $hours = round($end->diffInMinutes($start) / 60, 2);
 
+        $rate = $request->get('rate') ?? $request->user()->rate;
+
         $projectId = $request->get('project');
 
         $work->update([
@@ -109,7 +210,7 @@ class WorkController extends Controller
             'start' => $start,
             'hours' => $hours,
             'work_done' => $request->get('work_done'),
-            'rate' => $request->get('rate'),
+            'rate' => $rate,
         ]);
 
         return redirect("/projects/$projectId");
@@ -123,26 +224,13 @@ class WorkController extends Controller
      */
     public function destroy(Work $work)
     {
+        $project_id = $work->project_id;
+
         if (!$this->guard($work)) {
-            return redirect("/projects/$work->project_id");
+            return redirect("/projects/$project_id");
         }
 
-        // TODO: implement
-    }
-
-    /**
-     * Checks current user privileges before allowing them through
-     *
-     * @param Work $work The work which will be looked at
-     * @return bool
-     */
-    private function guard(Work $work)
-    {
-        $user = \Auth::user();
-        if ($user->id === $work->user->id || $user->isManager()) {
-            return true;
-        }
-
-        return false;
+        Work::find($work->id)->delete();
+        return redirect("/projects/$project_id");
     }
 }

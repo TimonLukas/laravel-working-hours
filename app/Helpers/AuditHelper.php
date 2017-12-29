@@ -2,14 +2,26 @@
 
 namespace App\Helpers;
 
+use function json_encode;
+use function var_dump;
+
 class AuditHelper
 {
+    public static function prepareAudits(\Illuminate\Support\Collection $audits)
+    {
+        return $audits->map(function ($audit) {
+            return static::prepareAudit($audit);
+        })->filter(function ($audit) {
+            return count($audit['values']) > 0;
+        })->reverse();
+    }
 
     public static function prepareAudit(\OwenIt\Auditing\Models\Audit $audit)
     {
         $newAuditValues = [];
 
-        foreach ($audit->getModified() as $key => $change) {
+        $audits = $audit->getModified();
+        foreach ($audits as $key => $change) {
             if (isset($change['old']) && is_array($change['old'])) {
                 $change['old'] = $change['old']['date'];
             }
@@ -18,7 +30,7 @@ class AuditHelper
                 $change['new'] = $change['new']['date'];
             }
 
-            if (isset($change['old']) && $change['old'] == $change['new']) {
+            if (isset($change['old'], $change['new']) && $change['old'] === $change['new']) {
                 continue;
             }
             $newAuditValues[$key] = $change;
@@ -30,14 +42,5 @@ class AuditHelper
             'created_at' => $audit->created_at,
             'values' => $newAuditValues,
         ];
-    }
-
-    public static function prepareAudits(\Illuminate\Support\Collection $audits)
-    {
-        return $audits->map(function ($audit) {
-            return static::prepareAudit($audit);
-        })->filter(function ($audit) {
-            return count($audit['values']) > 0;
-        })->reverse();
     }
 }

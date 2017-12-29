@@ -13,16 +13,18 @@
                     <p class="category">Detailed information about this specific work unit</p>
                 </div>
                 <div class="col-sm-6 align-right">
-                    <a href="/works/{{ $work->id }}/edit" class="btn btn-default">
-                        <i class="material-icons">mode_edit</i>
-                    </a>
-                    <form action="/works/{{ $work->id }}" method="POST" class="inline-block">
-                        {{ csrf_field() }}
-                        {{ method_field('DELETE') }}
-                        <button class="btn btn-danger">
-                            <i class="material-icons">delete</i>
-                        </button>
-                    </form>
+                    @if(Auth::user()->is_manager)
+                        <a href="/works/{{ $work->id }}/edit" class="btn btn-default">
+                            <i class="material-icons">mode_edit</i>
+                        </a>
+                        <form action="/works/{{ $work->id }}" method="POST" class="inline-block">
+                            {{ csrf_field() }}
+                            {{ method_field('DELETE') }}
+                            <button class="btn btn-danger">
+                                <i class="material-icons">delete</i>
+                            </button>
+                        </form>
+                    @endif
                 </div>
             </div>
         </div>
@@ -43,14 +45,16 @@
                 <div class="col-sm-2 align-right"><b>Hours worked</b></div>
                 <div class="col-sm-10">{{ number_format($work->hours, 2) }}</div>
             </div>
-            <div class="row">
-                <div class="col-sm-2 align-right"><b>Hourly rate</b></div>
-                <div class="col-sm-10">{{ number_format($work->rate, 2) }}</div>
-            </div>
-            <div class="row">
-                <div class="col-sm-2 align-right"><b>Total cost</b></div>
-                <div class="col-sm-10">{{ number_format($work->rate * $work->hours, 2) }}</div>
-            </div>
+            @if(Auth::user()->is_manager)
+                <div class="row">
+                    <div class="col-sm-2 align-right"><b>Hourly rate</b></div>
+                    <div class="col-sm-10">{{ number_format($work->rate, 2) }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2 align-right"><b>Total cost</b></div>
+                    <div class="col-sm-10">{{ number_format($work->rate * $work->hours, 2) }}</div>
+                </div>
+            @endif
         </div>
     </div>
 

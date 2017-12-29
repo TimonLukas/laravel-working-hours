@@ -63,7 +63,7 @@
 
 @push('scripts')
     <script>
-        $("table.dataTable").on("click", "tbody tr", (event) => {
+        $("table.dataTable").on("click", "tbody tr", function (event) {
             if (event.target.tagName === "TD") {
                 const target = $(event.target);
                 const tr = target.parent();

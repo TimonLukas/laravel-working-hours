@@ -13,16 +13,21 @@
                     <p class="category">Show {{ $project->name }}'s properties and changes to them</p>
                 </div>
                 <div class="col-sm-6 align-right">
-                    <a href="/projects/{{ $project->id }}/edit" class="btn btn-default">
-                        <i class="material-icons">mode_edit</i>
-                    </a>
-                    <form action="/projects/{{ $project->id }}" method="POST" class="inline-block">
-                        {{ csrf_field() }}
-                        {{ method_field('DELETE') }}
-                        <button class="btn btn-danger">
-                            <i class="material-icons">delete</i>
-                        </button>
-                    </form>
+                    @if(Auth::user()->isManager())
+                        <a href="/works/create" class="btn btn-default">
+                            <i class="material-icons">add</i>
+                        </a>
+                        <a href="/projects/{{ $project->id }}/edit" class="btn btn-default">
+                            <i class="material-icons">mode_edit</i>
+                        </a>
+                        <form action="/projects/{{ $project->id }}" method="POST" class="inline-block">
+                            {{ csrf_field() }}
+                            {{ method_field('DELETE') }}
+                            <button class="btn btn-danger">
+                                <i class="material-icons">delete</i>
+                            </button>
+                        </form>
+                    @endif
                 </div>
             </div>
         </div>
@@ -31,6 +36,10 @@
             <div class="row">
                 <div class="col-sm-2 align-right"><b>Name</b></div>
                 <div class="col-sm-10">{{ $project->name }}</div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2 align-right"><b>Assigned Workers</b></div>
+                <div class="col-sm-10">{{ $project->users->count() }}</div>
             </div>
             <div class="row">
                 <div class="col-sm-2 align-right"><b>Total work units</b></div>
@@ -50,7 +59,10 @@
     </div>
 
     <div class="row">
-        <div class="col-md-4">
+        @php
+            $cols = Auth::user()->isManager() ? "col-md-4" : "col-md-6";
+        @endphp
+        <div class="{{ $cols }}">
             <div class="card">
                 <div class="card-header card-chart" data-background-color="green">
                     <div class="ct-chart" id="hoursPerDayChart"></div>
@@ -61,8 +73,7 @@
                 </div>
             </div>
         </div>
-
-        <div class="col-md-4">
+        <div class="{{ $cols }}">
             <div class="card">
                 <div class="card-header card-chart" data-background-color="orange">
                     <div class="ct-chart" id="devsPerDayChart"></div>
@@ -74,18 +85,19 @@
 
             </div>
         </div>
-
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-header card-chart" data-background-color="red">
-                    <div class="ct-chart" id="costPerDayChart"></div>
-                </div>
-                <div class="card-content">
-                    <h4 class="title">Cost</h4>
-                    <p class="category">Keep the total cost at bay</p>
+        @if(Auth::user()->isManager())
+            <div class="{{ $cols }}">
+                <div class="card">
+                    <div class="card-header card-chart" data-background-color="red">
+                        <div class="ct-chart" id="costPerDayChart"></div>
+                    </div>
+                    <div class="card-content">
+                        <h4 class="title">Cost</h4>
+                        <p class="category">Keep the total cost at bay</p>
+                    </div>
                 </div>
             </div>
-        </div>
+        @endif
     </div>
 
     <div class="card">
@@ -127,16 +139,22 @@
                         </td>
                         <td>
                             @if(Auth::check() && (Auth::user()->isManager() || Auth::id() === $work->user_id))
-                                <a href="/works/{{ $work->id }}/edit" class="btn btn-default">
-                                    <i class="material-icons">mode_edit</i>
-                                </a>
-                                <form action="/works/{{ $work->id }}" method="POST" class="inline-block">
-                                    {{ csrf_field() }}
-                                    {{ method_field('DELETE') }}
-                                    <button class="btn btn-danger">
-                                        <i class="material-icons">delete</i>
-                                    </button>
-                                </form>
+                                @if($work->hours === (float)0)
+                                    <a href="/works/create/end/{{ $work->id }}" class="btn btn-success">
+                                        <i class="material-icons">check</i>
+                                    </a>
+                                @elseif(Auth::user()->isManager())
+                                    <a href="/works/{{ $work->id }}/edit" class="btn btn-default">
+                                        <i class="material-icons">mode_edit</i>
+                                    </a>
+                                    <form action="/works/{{ $work->id }}" method="POST" class="inline-block">
+                                        {{ csrf_field() }}
+                                        {{ method_field('DELETE') }}
+                                        <button class="btn btn-danger">
+                                            <i class="material-icons">delete</i>
+                                        </button>
+                                    </form>
+                                @endif
                             @endif
                         </td>
                     </tr>
@@ -159,7 +177,7 @@
 
 @push('scripts')
     <script>
-        $("table.dataTable").on("click", "tbody tr", (event) => {
+        $("table.dataTable").on("click", "tbody tr", function (event) {
             if (event.target.tagName === "TD") {
                 const target = $(event.target);
                 const tr = target.parent();
@@ -171,6 +189,7 @@
     </script>
 
     <script>
+        /* HoursPerDayChart */
         const dataHoursPerDayChart = {
             labels: {!! json_encode($labels) !!},
             series: [
@@ -184,7 +203,7 @@
             }),
             low: 0,
             high: 24,
-            chartPadding: {top: 0, right: 0, bottom: 0, left: 0},
+            chartPadding: {top: 0, right: 0, bottom: 0, left: 0}
         };
 
         const hoursPerDayChart = new Chartist.Line('#hoursPerDayChart', dataHoursPerDayChart, optionsHoursPerDayChart);
@@ -192,6 +211,7 @@
         md.startAnimationForLineChart(hoursPerDayChart);
 
 
+        /* UsersPerDayChart */
         const dataUsersPerDayChart = {
             labels: {!! json_encode($labels) !!},
             series: [
@@ -204,8 +224,8 @@
                 tension: 0
             }),
             low: 0,
-            high: 10,
-            chartPadding: {top: 0, right: 0, bottom: 0, left: 0},
+            high: {{ $project->users->count() + 1 }},
+            chartPadding: {top: 0, right: 0, bottom: 0, left: 0}
         };
 
         const usersPerDayChart = new Chartist.Line('#devsPerDayChart', dataUsersPerDayChart, optionsUsersPerDayChart);
@@ -213,6 +233,7 @@
         md.startAnimationForLineChart(usersPerDayChart);
 
 
+        /* CostPerDayChart */
         const dataCostPerDayChart = {
             labels: {!! json_encode($labels) !!},
             series: [
@@ -225,8 +246,8 @@
                 tension: 0
             }),
             low: 0,
-            high: 100,
-            chartPadding: {top: 0, right: 0, bottom: 0, left: 0},
+            high: {{ $highest_cost }},
+            chartPadding: {top: 0, right: 0, bottom: 0, left: 0}
         };
 
         const costPerDayChart = new Chartist.Line('#costPerDayChart', dataCostPerDayChart, optionsCostPerDayChart);

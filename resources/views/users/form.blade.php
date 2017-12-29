@@ -1,6 +1,6 @@
 <div class="form-group label-static is-empty">
     <label for="name" class="control-label">Name</label>
-    <input type="text" class="form-control" name="name" placeholder="John Doe" value="{{ $user->name }}">
+    <input type="text" class="form-control" name="name" placeholder="John Doe" value="{{ $user->name }}" autofocus>
 </div>
 
 <div class="form-group label-static is-empty">
